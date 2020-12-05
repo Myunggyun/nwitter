@@ -6,7 +6,7 @@ import Nweet from "../components/Nweet";
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
     dbService.collection("nweets").onSnapshot(snapshot => {
@@ -31,7 +31,7 @@ const Home = ({ userObj }) => {
     const nweetObj = {
       text: nweet,
       createdat: Date.now(),
-      createdId: userObj.uid,
+      creatorId: userObj.uid,
       attachmentURL,
     };
     await dbService.collection("nweets").add(nweetObj);
@@ -64,6 +64,7 @@ const Home = ({ userObj }) => {
   const onClearAttachment = () => {
     setAttachment(null);
   };
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -88,7 +89,7 @@ const Home = ({ userObj }) => {
           <Nweet
             nweetObj={nweet}
             key={nweet.id}
-            isOwner={nweet.createdId === userObj.uid}
+            isOwner={nweet.creatorId === userObj.uid}
           />
         ))}
       </div>
