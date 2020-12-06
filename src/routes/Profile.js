@@ -29,7 +29,7 @@ const Profile = ({ userObj, refreshUser }) => {
     } = event;
     setDisplayName(value);
   };
-
+  //submit
   const onSubmit = async event => {
     event.preventDefault();
     if (userObj.displayName !== newDisplayName) {
