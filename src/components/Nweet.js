@@ -61,7 +61,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
             <img src={nweetObj.attachmentURL} alt="" />
           )}
           {isOwner && (
-            <div class="nweet__actions">
+            <div className="nweet__actions">
               <span onClick={onDeleteClick}>
                 <FontAwesomeIcon icon={faTrash} />
               </span>

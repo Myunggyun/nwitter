@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 const Profile = ({ userObj, refreshUser }) => {
   let history = useHistory();
-  const [newDisplayName, setDisplayName] = useState(userObj.displayName);
+  const [newDisplayName, setDisplayName] = useState("");
 
   const onLogOutClick = () => {
     authService.signOut();
@@ -12,12 +12,11 @@ const Profile = ({ userObj, refreshUser }) => {
   };
 
   const getMyNweets = async () => {
-    const nweets = await dbService
+    await dbService
       .collection("nweets")
       .where("creatorId", "==", userObj.uid)
       .orderBy("createdat")
       .get();
-    console.log(nweets.docs.map(doc => doc.data()));
   };
 
   useEffect(() => {
@@ -33,39 +32,41 @@ const Profile = ({ userObj, refreshUser }) => {
 
   const onSubmit = async event => {
     event.preventDefault();
-    console.log(userObj);
     if (userObj.displayName !== newDisplayName) {
       await userObj.updateProfile({
         displayName: newDisplayName,
       });
       refreshUser();
+      setDisplayName("");
     }
   };
 
   return (
-    <div div className="container">
-      <form onSubmit={onSubmit} className="profileForm">
-        <input
-          className="formInput"
-          autoFocus
-          type="text"
-          placeholder="displayName"
-          onChange={onChange}
-          value={newDisplayName}
-        />
-        <input
-          type="submit"
-          value="Update Profile"
-          className="formBtn"
-          style={{
-            marginTop: 10,
-          }}
-        />
-      </form>
-      <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
-        Log Out
-      </span>
-    </div>
+    <>
+      <div className="container">
+        <form onSubmit={onSubmit} className="profileForm">
+          <input
+            className="formInput"
+            autoFocus
+            type="text"
+            placeholder="displayName"
+            onChange={onChange}
+            value={newDisplayName ? newDisplayName : ""}
+          />
+          <input
+            type="submit"
+            value="Update Profile"
+            className="formBtn"
+            style={{
+              marginTop: 10,
+            }}
+          />
+        </form>
+        <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+          Log Out
+        </span>
+      </div>
+    </>
   );
 };
 
